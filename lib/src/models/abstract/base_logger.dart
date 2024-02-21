@@ -20,8 +20,12 @@ abstract class BaseLogger {
   String _getPrefix(LogLevel level) {
     var prefix = getPrefix(level);
     var timestamp = getTimestampString(timestampMode);
-    var parts = [prefix, timestamp];
-    return parts.whereType<String>().join(' ');
+    if (timestamp != null) {
+      timestamp = '$timestamp ';
+    }
+    var parts = [prefix, timestamp].where((x) => x != null && x.isNotEmpty);
+    var result = parts.whereType<String>().join(' ');
+    return result;
   }
 
   /// Useful to insert new line characters for file based logs or to place

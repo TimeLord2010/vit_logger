@@ -24,9 +24,9 @@ String? getTimestampString(TimestampMode mode) {
 
     // Time only formats
     case TimestampMode.time:
-      return now.toLocal().toIso8601String().split('T')[1];
+      return _getTime(now.toLocal());
     case TimestampMode.timeIso:
-      return now.toUtc().toIso8601String().split('T')[1];
+      return _getTime(now.toUtc());
 
     // Number formats
     case TimestampMode.epochTimestamp:
@@ -42,4 +42,11 @@ String _getFullDate(DateTime date) {
   var minute = date.minute.toString().padLeft(2, '0');
   var second = date.second.toString().padLeft(2, '0');
   return '$year-$month-$day $hour:$minute:$second';
+}
+
+String _getTime(DateTime dt) {
+  var time = dt.toIso8601String().split('T')[1];
+  var withoutZ = time.substring(0, time.length - 1);
+  var withTwoDecimalPlaces = withoutZ.substring(0, withoutZ.length - 4);
+  return withTwoDecimalPlaces;
 }
