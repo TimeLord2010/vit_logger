@@ -3,7 +3,7 @@ import 'package:vit_logger/src/models/enums/timestamp_mode.dart';
 import 'package:vit_logger/src/usecases/get_timestamp_string.dart';
 
 abstract class BaseLogger {
-  BaseLogger({
+  const BaseLogger({
     this.timestampMode = TimestampMode.none,
   });
 

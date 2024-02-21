@@ -2,6 +2,7 @@ import 'package:vit_logger/src/models/abstract/base_logger.dart';
 import 'package:vit_logger/src/models/enums/log_level.dart';
 
 class TerminalLogger extends BaseLogger {
+  const TerminalLogger();
   @override
   String getPrefix(LogLevel level) {
     return switch (level) {

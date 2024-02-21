@@ -1,14 +1,25 @@
+import 'package:vit_logger/src/models/abstract/base_logger.dart';
+import 'package:vit_logger/src/repositories/loggers/terminal_logger.dart';
+
 import '../models/lap.dart';
 
-class StopWatch {
+class VitStopWatch {
+  final BaseLogger logger;
   final String event;
   final DateTime start;
   final List<Lap> laps = [];
 
-  StopWatch(this.event) : start = DateTime.now();
+  VitStopWatch(
+    this.event, {
+    this.logger = const TerminalLogger(),
+  }) : start = DateTime.now();
 
   bool _stoped = false;
 
+  /// The date object at the time the stop watch was created.
+  ///
+  /// If you called [lap], then this is the date object at the time the method
+  /// was called.
   DateTime get lastDate {
     if (laps.isEmpty) return start;
     return laps.last.date;
@@ -24,14 +35,15 @@ class StopWatch {
     int elapsed = lap.elapsed;
     if (log) {
       if (tag == null) {
-        logInfo('$event (${elapsed}ms)');
+        logger.info('$event (${elapsed}ms)');
       } else {
-        logInfo('$event [$tag] (${elapsed}ms)');
+        logger.info('$event [$tag] (${elapsed}ms)');
       }
     }
     return lap;
   }
 
+  /// Returns total time elapsed in [event].
   int stop([bool log = true]) {
     if (_stoped) throw Exception('Stopwatch already stoped');
     _stoped = true;
@@ -40,7 +52,7 @@ class StopWatch {
     var now = DateTime.now();
     var diff = now.difference(start);
     var totalElapsed = diff.inMilliseconds;
-    if (log) logInfo('$event (${totalElapsed}ms)');
+    if (log) logger.info('$event (${totalElapsed}ms)');
     return totalElapsed;
   }
 }
