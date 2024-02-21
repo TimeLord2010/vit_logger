@@ -1,14 +1,12 @@
 name: vit_logger
-description: A starting point for Dart libraries or applications.
+description: A simple logging package with customization in mind.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+repository: https://github.com/TimeLord2010/vit_logger.git
 
 environment:
   sdk: ^3.3.0
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
 
 dev_dependencies:
   lints: ^3.0.0

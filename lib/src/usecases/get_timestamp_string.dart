@@ -11,7 +11,7 @@ String? getTimestampString(TimestampMode mode) {
 
     // Date and time formats
     case TimestampMode.fullLocal:
-      return getFullDate(now.toLocal());
+      return _getFullDate(now.toLocal());
     case TimestampMode.iso8601:
       return now.toUtc().toIso8601String();
 
@@ -34,7 +34,7 @@ String? getTimestampString(TimestampMode mode) {
   }
 }
 
-String getFullDate(DateTime date) {
+String _getFullDate(DateTime date) {
   var year = date.year;
   var month = date.month.toString().padLeft(2, '0');
   var day = date.day.toString().padLeft(2, '0');
