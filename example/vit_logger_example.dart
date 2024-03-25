@@ -2,9 +2,10 @@ import 'package:vit_logger/vit_logger.dart';
 
 void main() async {
   var logger = TerminalLogger();
-  logger.info('This is a informational message'); // "This is a informational message" in the default color
+  logger.info('This is a informational message'); // "This is a informational message" in the green
   logger.warn('This is a warning message'); // "This is a warning message" in yellow
   logger.error('This is a error message'); // "This is a error message" in red
+  logger.debug('This is a debug message'); // "This is a debug message" in magenta
   var otherLogger = TerminalLogger(
     timestampMode: TimestampMode.timeIso,
   );

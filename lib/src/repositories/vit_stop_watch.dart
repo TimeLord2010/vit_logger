@@ -1,10 +1,10 @@
-import 'package:vit_logger/src/models/abstract/base_logger.dart';
+import 'package:vit_logger/src/models/abstract/text_logger.dart';
 import 'package:vit_logger/src/repositories/loggers/terminal_logger.dart';
 
 import '../models/lap.dart';
 
 class VitStopWatch {
-  final BaseLogger logger;
+  final TextLogger logger;
   final String event;
   final DateTime start;
   final List<Lap> laps = [];
