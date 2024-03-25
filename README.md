@@ -1,6 +1,6 @@
 This is a simple library to log events with colorful terminal outputs and stop watch class to measure performance across your application.
 
-## Usage
+# Usage
 
 ```dart
 import 'package:vit_logger/vit_logger.dart';
@@ -44,16 +44,17 @@ void main() async {
 <img width="633" alt="Screenshot 2024-03-25 at 11 41 35" src="https://github.com/TimeLord2010/vit_logger/assets/50129092/73d1470d-b594-410d-aa07-8f60fa8a7a42">
 
 
-## Features
+# Features
 
-### BaseLogger
+## BaseLogger
 
-Base abstract class to implement any logger.
+Base abstract class to implement any logger. This class makes use of `VitLogger.eventMatcher` for
+event filtering.
 
-### TerminalLogger
+## TerminalLogger
 
 The default logger. This logger uses the terminal to print colorful messages.
 
-### VitStopWatch
+## VitStopWatch
 
 Class to help debug methods that take some time to complete or that could take some time.
