@@ -6,6 +6,7 @@ import 'package:vit_logger/src/usecases/get_timestamp_string.dart';
 abstract class TextLogger extends BaseLogger {
   const TextLogger({
     this.timestampMode = TimestampMode.none,
+    super.event,
   });
 
   final TimestampMode timestampMode;
@@ -42,7 +43,7 @@ abstract class TextLogger extends BaseLogger {
 
   /// Used to indicate informational logs.
   FutureOr<void> info(String message) async {
-    await writer(
+    await log(
       message: digest(message, LogLevel.info),
       level: LogLevel.info,
     );
@@ -50,7 +51,7 @@ abstract class TextLogger extends BaseLogger {
 
   /// Used to indicate warning logs.
   FutureOr<void> warn(String message) async {
-    await writer(
+    await log(
       message: digest(message, LogLevel.warn),
       level: LogLevel.warn,
     );
@@ -58,7 +59,7 @@ abstract class TextLogger extends BaseLogger {
 
   /// Used to indicate error logs.
   FutureOr<void> error(String message) async {
-    await writer(
+    await log(
       message: digest(message, LogLevel.error),
       level: LogLevel.error,
     );
@@ -66,7 +67,7 @@ abstract class TextLogger extends BaseLogger {
 
   /// Used to indicate debug logs.
   FutureOr<void> debug(String message) async {
-    await writer(
+    await log(
       message: digest(message, LogLevel.debug),
       level: LogLevel.debug,
     );

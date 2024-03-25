@@ -1,3 +1,7 @@
+## 1.2.0
+
+* Added event filtering: Each logger instance now has an optional `event`. This event can be filtered out by changing `VitLogger.eventMatcher`.
+
 ## 1.1.0
 
 * Added 'debug' log level.

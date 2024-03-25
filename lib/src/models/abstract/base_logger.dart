@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:vit_logger/src/models/enums/log_level.dart';
+import 'package:vit_logger/vit_logger.dart';
 
 abstract class BaseLogger {
   const BaseLogger({
@@ -9,8 +9,28 @@ abstract class BaseLogger {
 
   final String? event;
 
-  /// The actual logger function. This function will be called automatically
-  /// by "info", "warn", "error" with aditional modifiers to the passing String.
+  /// Checks if the current [event] should be logged by matching it with
+  /// [VitLogger.eventMatchers].
+  /// If not, the log won't be effective.
+  ///
+  /// This is the function that should be used in [BaseLogger]
+  /// implementations.
+  FutureOr<void> log({
+    required String message,
+    required LogLevel level,
+  }) async {
+    var shouldLogEvent = VitLogger.eventMatcher.shouldLogEvent(event);
+    if (!shouldLogEvent) {
+      return;
+    }
+    await writer(
+      level: level,
+      message: message,
+    );
+  }
+
+  /// The actual logger function containing the implementation to log the
+  /// message.
   FutureOr<void> writer({
     required String message,
     required LogLevel level,

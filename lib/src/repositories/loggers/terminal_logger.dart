@@ -6,6 +6,7 @@ import 'package:vit_logger/src/models/index.dart';
 class TerminalLogger extends TextLogger {
   const TerminalLogger({
     super.timestampMode,
+    super.event,
     this.useColorfulOutput,
   });
 

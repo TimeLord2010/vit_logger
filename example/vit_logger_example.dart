@@ -15,4 +15,21 @@ void main() async {
   stopWatch.lap(tag: 'FETCHED'); // MyEvent [FETCHED] (204ms)
   await Future.delayed(const Duration(milliseconds: 800));
   stopWatch.stop(); // MyEvent (1008ms)
+
+  VitLogger.eventMatcher.patterns = [RegExp(r'Home(:.*)?')];
+
+  var loginLogger = TerminalLogger(
+    event: 'Login',
+  );
+  loginLogger.info('This is not printed because event was filtered');
+
+  var homeLogger = TerminalLogger(
+    event: 'Home',
+  );
+  homeLogger.info('This is a "Home" message');
+
+  var homeMenuLogger = TerminalLogger(
+    event: 'Home:Menu',
+  );
+  homeMenuLogger.info('This is a "Home:Menu" message');
 }
