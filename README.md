@@ -22,6 +22,9 @@ void main() async {
 }
 ```
 
+<img width="633" alt="Screenshot 2024-03-25 at 11 41 35" src="https://github.com/TimeLord2010/vit_logger/assets/50129092/73d1470d-b594-410d-aa07-8f60fa8a7a42">
+
+
 ## Features
 
 ### BaseLogger
