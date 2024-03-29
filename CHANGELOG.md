@@ -1,3 +1,11 @@
+## 2.0.0
+
+* [BREAKING] `TextLogger` log methods (info, warm, error and debug) no longer return a 
+future. If you created a `TextLogger` that has logs asyncronously and you need to way
+for it to finish, you will need to create your own class.
+* Added `disableColorfulOutput` static field in `TerminalLogger`.
+* Added `printer` static field to `TerminalLogger`.
+
 ## 1.2.0
 
 * Added event filtering: Each logger instance now has an optional `event`. This event can be filtered out by changing `VitLogger.eventMatcher`.

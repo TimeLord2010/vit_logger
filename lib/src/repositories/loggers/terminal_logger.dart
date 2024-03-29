@@ -1,7 +1,8 @@
-import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:vit_logger/src/models/abstract/text_logger.dart';
-import 'package:vit_logger/src/models/index.dart';
+import 'package:vit_logger/src/models/enums/terminal_printer.dart';
+import 'package:vit_logger/vit_logger.dart';
 
 class TerminalLogger extends TextLogger {
   const TerminalLogger({
@@ -12,12 +13,17 @@ class TerminalLogger extends TextLogger {
 
   final bool Function(LogLevel level)? useColorfulOutput;
 
+  static TerminalPrinter printer = TerminalPrinter.print;
+
+  static bool disableColorfulOutput = false;
+
   bool hasColor(LogLevel level) {
-    var fn = useColorfulOutput;
-    if (fn == null) {
-      return true;
+    if (disableColorfulOutput) {
+      return false;
     }
-    return fn(level);
+    var fn = useColorfulOutput;
+    if (fn != null) return fn(level);
+    return true;
   }
 
   @override
@@ -47,10 +53,20 @@ class TerminalLogger extends TextLogger {
   }
 
   @override
-  FutureOr<void> writer({
+  void writer({
     required String message,
     required LogLevel level,
   }) {
-    print(message);
+    switch (printer) {
+      case TerminalPrinter.print:
+        print(message);
+        break;
+      case TerminalPrinter.developerLog:
+        developer.log(
+          message,
+          name: event ?? '',
+        );
+        break;
+    }
   }
 }

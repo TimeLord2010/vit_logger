@@ -58,3 +58,20 @@ The default logger. This logger uses the terminal to print colorful messages.
 ## VitStopWatch
 
 Class to help debug methods that take some time to complete or that could take some time.
+
+
+# Common issues
+
+## TerminalLogger prints strange characters on IOS
+
+This is a open [flutter Github Issue](https://github.com/flutter/flutter/issues/20663)
+
+To fix this, either disable colors on TerminalLogger:
+```dart
+TerminalLogger.disableColorfulOutput = false;
+```
+
+Or use another printer inside TerminalLogger:
+```dart
+TerminalLogger.printer = TerminalPrinter.developerLog;
+```
