@@ -1,6 +1,10 @@
+## 2.0.1
+
+* Exposed all models to default import;
+
 ## 2.0.0
 
-* [BREAKING] `TextLogger` log methods (info, warm, error and debug) no longer return a 
+* [BREAKING] `TextLogger` log methods (info, warm, error and debug) no longer return a
 future. If you created a `TextLogger` that has logs asyncronously and you need to way
 for it to finish, you will need to create your own class.
 * Added `disableColorfulOutput` static field in `TerminalLogger`.
