@@ -1,18 +1,50 @@
 import 'package:vit_logger/src/models/abstract/text_logger.dart';
-import 'package:vit_logger/src/repositories/loggers/terminal_logger.dart';
 
 import '../models/lap.dart';
 
 class VitStopWatch {
-  final TextLogger logger;
+  /// The event attached to the stop watch.
   final String event;
+
+  final TextLogger? logger;
+  final void Function(String msg, int mili)? loggerFn;
   final DateTime start;
   final List<Lap> laps = [];
 
-  VitStopWatch(
+  /// If given, only logs at [stop], if the time elapsed since the intance
+  /// creation is greater than [minDuration].
+  final Duration? minDuration;
+
+  VitStopWatch._(
     this.event, {
-    this.logger = const TerminalLogger(),
+    this.logger,
+    this.loggerFn,
+    this.minDuration,
   }) : start = DateTime.now();
+
+  factory VitStopWatch.logger(
+    String event, {
+    required TextLogger logger,
+    Duration? minDuration,
+  }) {
+    return VitStopWatch._(
+      event,
+      logger: logger,
+      minDuration: minDuration,
+    );
+  }
+
+  factory VitStopWatch.function(
+    String event, {
+    required void Function(String msg, int mili)? logger,
+    Duration? minDuration,
+  }) {
+    return VitStopWatch._(
+      event,
+      loggerFn: logger,
+      minDuration: minDuration,
+    );
+  }
 
   bool _stoped = false;
 
@@ -25,6 +57,14 @@ class VitStopWatch {
     return laps.last.date;
   }
 
+  void _log(String msg, int mili) {
+    if (logger != null) {
+      logger!.info(msg);
+    } else {
+      loggerFn!(msg, mili);
+    }
+  }
+
   Lap lap({
     bool log = true,
     String? tag,
@@ -35,9 +75,9 @@ class VitStopWatch {
     int elapsed = lap.elapsed;
     if (log) {
       if (tag == null) {
-        logger.info('$event (${elapsed}ms)');
+        _log('$event (${elapsed}ms)', elapsed);
       } else {
-        logger.info('$event [$tag] (${elapsed}ms)');
+        _log('$event [$tag] (${elapsed}ms)', elapsed);
       }
     }
     return lap;
@@ -50,9 +90,18 @@ class VitStopWatch {
     var lap = Lap.fromLastDate(lastDate);
     laps.add(lap);
     var now = DateTime.now();
-    var diff = now.difference(start);
+    Duration diff = now.difference(start);
     var totalElapsed = diff.inMilliseconds;
-    if (log) logger.info('$event (${totalElapsed}ms)');
+    if (log) {
+      var message = '$event (${totalElapsed}ms)';
+      if (minDuration != null) {
+        if (diff.compareTo(minDuration!) > 0) {
+          _log(message, totalElapsed);
+        }
+      } else {
+        _log(message, totalElapsed);
+      }
+    }
     return totalElapsed;
   }
 }
