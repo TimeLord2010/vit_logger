@@ -1,49 +1,58 @@
-import 'package:vit_logger/src/models/abstract/text_logger.dart';
-
-import '../models/lap.dart';
+import '../data/enums/log_level.dart';
+import '../data/models/lap.dart';
+import 'loggers/terminal_logger.dart';
 
 class VitStopWatch {
-  /// The event attached to the stop watch.
+  /// The event associated with the stopwatch, represented as a string.
   final String event;
 
-  final TextLogger? logger;
-  final void Function(String msg, int mili)? loggerFn;
+  /// A function for logging messages, which takes a string message and
+  /// an integer representing milliseconds.
+  late final void Function(StopWatchLapData data, LogLevel level) loggerFn;
+
+  /// The timestamp when the stopwatch was created.
   final DateTime start;
+
+  /// A list storing the recorded laps.
   final List<Lap> laps = [];
 
-  /// If given, only logs at [stop], if the time elapsed since the intance
-  /// creation is greater than [minDuration].
-  final Duration? minDuration;
+  /// The minimum duration threshold for marking logs as warnings.
+  ///
+  /// Logs produced after a duration greater than [minWarnDuration],
+  /// from when the instance was created, are marked as warnings.
+  /// If [minErrorDuration] is set and exceeded, logs are marked as
+  /// errors instead.
+  final Duration? minWarnDuration;
 
-  VitStopWatch._(
+  /// The minimum duration threshold for marking logs as errors.
+  ///
+  /// Logs produced after a duration greater than [minErrorDuration],
+  /// calculated from the instance's creation time, are marked as errors.
+  final Duration? minErrorDuration;
+
+  VitStopWatch(
     this.event, {
-    this.logger,
-    this.loggerFn,
-    this.minDuration,
-  }) : start = DateTime.now();
-
-  factory VitStopWatch.logger(
-    String event, {
-    required TextLogger logger,
-    Duration? minDuration,
-  }) {
-    return VitStopWatch._(
-      event,
-      logger: logger,
-      minDuration: minDuration,
-    );
-  }
-
-  factory VitStopWatch.function(
-    String event, {
-    required void Function(String msg, int mili)? logger,
-    Duration? minDuration,
-  }) {
-    return VitStopWatch._(
-      event,
-      loggerFn: logger,
-      minDuration: minDuration,
-    );
+    void Function(StopWatchLapData data, LogLevel level)? logger,
+    this.minWarnDuration,
+    this.minErrorDuration,
+  }) : start = DateTime.now() {
+    loggerFn = logger ??
+        (data, level) async {
+          var event = data.event;
+          var tag = data.tag;
+          var milli = data.lap.lapElapsed.inMilliseconds;
+          String msg;
+          if (tag == null) {
+            msg = '$event (${milli}ms)';
+          } else {
+            msg = '$event [$tag] (${milli}ms)';
+          }
+          var terminalLogger = TerminalLogger(event: event);
+          await terminalLogger.log(
+            message: msg,
+            level: level,
+          );
+        };
   }
 
   bool _stoped = false;
@@ -57,51 +66,67 @@ class VitStopWatch {
     return laps.last.date;
   }
 
-  void _log(String msg, int mili) {
-    if (logger != null) {
-      logger!.info(msg);
-    } else {
-      loggerFn!(msg, mili);
+  /// Create a lap object and logs if necessary.
+  Lap _createLap(String? tag, [bool isLastLap = false]) {
+    // Creating lap
+    DateTime? getLapDate() {
+      if (laps.isEmpty) return null;
+      return laps.last.date;
     }
+
+    var lap = Lap.create(
+      eventStartDate: start,
+      lastLapDate: getLapDate(),
+      tag: tag,
+      isLast: isLastLap,
+    );
+
+    // Logging
+    var data = StopWatchLapData(
+      event: event,
+      lap: lap,
+      tag: tag,
+    );
+    var duration = lap.eventElapsed;
+    LogLevel level = LogLevel.info;
+    if (minErrorDuration != null && duration > minErrorDuration!) {
+      level = LogLevel.error;
+    } else if (minWarnDuration != null && duration > minWarnDuration!) {
+      level = LogLevel.warn;
+    }
+    loggerFn(data, level);
+
+    return lap;
   }
 
   Lap lap({
-    bool log = true,
     String? tag,
   }) {
     if (_stoped) throw Exception('Stopwatch already stoped');
-    var lap = Lap.fromLastDate(lastDate);
+    var lap = _createLap(tag);
     laps.add(lap);
-    int elapsed = lap.elapsed;
-    if (log) {
-      if (tag == null) {
-        _log('$event (${elapsed}ms)', elapsed);
-      } else {
-        _log('$event [$tag] (${elapsed}ms)', elapsed);
-      }
-    }
+
     return lap;
   }
 
   /// Returns total time elapsed in [event].
-  int stop([bool log = true]) {
+  Duration stop([bool log = true]) {
     if (_stoped) throw Exception('Stopwatch already stoped');
     _stoped = true;
-    var lap = Lap.fromLastDate(lastDate);
+    var lap = _createLap(null, true);
     laps.add(lap);
-    var now = DateTime.now();
-    Duration diff = now.difference(start);
-    var totalElapsed = diff.inMilliseconds;
-    if (log) {
-      var message = '$event (${totalElapsed}ms)';
-      if (minDuration != null) {
-        if (diff.compareTo(minDuration!) > 0) {
-          _log(message, totalElapsed);
-        }
-      } else {
-        _log(message, totalElapsed);
-      }
-    }
-    return totalElapsed;
+    return lap.eventElapsed;
   }
+}
+
+class StopWatchLapData {
+  final String event;
+  String? tag;
+  Lap lap;
+
+  StopWatchLapData({
+    required this.event,
+    required this.lap,
+    this.tag,
+  });
 }

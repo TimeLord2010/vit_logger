@@ -1,4 +1,4 @@
-import 'package:vit_logger/src/models/enums/timestamp_mode.dart';
+import 'package:vit_logger/src/data/enums/timestamp_mode.dart';
 
 String? getTimestampString(TimestampMode mode) {
   if (TimestampMode.none == mode) {

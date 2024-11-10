@@ -1,3 +1,7 @@
+## 2.1.0
+
+* `VitStopWatch` was reworked to improve usage.
+
 ## 2.0.1
 
 * Exposed all models to default import;

@@ -1,5 +1,8 @@
-import 'package:vit_logger/src/models/index.dart';
 import 'package:vit_logger/src/usecases/get_timestamp_string.dart';
+
+import '../../enums/log_level.dart';
+import '../../enums/timestamp_mode.dart';
+import 'base_logger.dart';
 
 abstract class TextLogger extends BaseLogger {
   const TextLogger({

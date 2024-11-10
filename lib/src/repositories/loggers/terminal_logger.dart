@@ -1,8 +1,8 @@
 import 'dart:developer' as developer;
 
-import 'package:vit_logger/src/models/abstract/text_logger.dart';
-import 'package:vit_logger/src/models/enums/terminal_printer.dart';
-import 'package:vit_logger/vit_logger.dart';
+import '../../data/enums/log_level.dart';
+import '../../data/enums/terminal_printer.dart';
+import '../../data/models/abstract/text_logger.dart';
 
 class TerminalLogger extends TextLogger {
   const TerminalLogger({

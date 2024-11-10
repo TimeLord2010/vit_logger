@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:vit_logger/vit_logger.dart';
+import '../../../../vit_logger.dart';
 
 abstract class BaseLogger {
   const BaseLogger({
