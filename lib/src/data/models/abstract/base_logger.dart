@@ -18,6 +18,7 @@ abstract class BaseLogger {
   FutureOr<void> log({
     required String message,
     required LogLevel level,
+    dynamic data,
   }) async {
     var shouldLogEvent = VitLogger.eventMatcher.shouldLogEvent(event);
     if (!shouldLogEvent) {
@@ -26,6 +27,7 @@ abstract class BaseLogger {
     await writer(
       level: level,
       message: message,
+      data: data,
     );
   }
 
@@ -34,5 +36,6 @@ abstract class BaseLogger {
   FutureOr<void> writer({
     required String message,
     required LogLevel level,
+    dynamic data,
   });
 }

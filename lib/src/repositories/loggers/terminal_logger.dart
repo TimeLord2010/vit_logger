@@ -56,6 +56,7 @@ class TerminalLogger extends TextLogger {
   void writer({
     required String message,
     required LogLevel level,
+    dynamic data,
   }) {
     switch (printer) {
       case TerminalPrinter.print:

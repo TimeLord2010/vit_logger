@@ -8,6 +8,7 @@ export 'src/data/models/abstract/base_logger.dart';
 export 'src/data/models/abstract/text_logger.dart';
 export 'src/data/models/lap.dart';
 export 'src/repositories/event_matcher.dart';
+export 'src/repositories/loggers/cloud_logger.dart';
 export 'src/repositories/loggers/terminal_logger.dart';
 export 'src/repositories/vit_stop_watch.dart';
 export 'src/usecases/get_timestamp_string.dart';
