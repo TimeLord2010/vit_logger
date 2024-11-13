@@ -3,6 +3,7 @@ library;
 import 'package:vit_logger/src/repositories/event_matcher.dart';
 
 export 'src/data/enums/log_level.dart';
+export 'src/data/enums/terminal_printer.dart';
 export 'src/data/enums/timestamp_mode.dart';
 export 'src/data/models/abstract/base_logger.dart';
 export 'src/data/models/abstract/text_logger.dart';

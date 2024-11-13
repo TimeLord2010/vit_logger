@@ -1,3 +1,7 @@
+## 2.1.1
+
+* Fix exporting missing TerminalPrinter enum.
+
 ## 2.1.0
 
 * `VitStopWatch` was reworked to improve usage.
