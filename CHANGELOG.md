@@ -1,3 +1,7 @@
+## 2.2.1
+
+* Fixed missing colored output for `VitStopWatch` when using [minWarnDuration] or [minErrorDuration].
+
 ## 2.2.0
 
 * Added [showInfoLogs] to provide better control over what is printed.

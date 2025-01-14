@@ -59,10 +59,7 @@ class VitStopWatch {
             msg = '$event [$tag] ($milliStr)';
           }
           var terminalLogger = TerminalLogger(event: event);
-          await terminalLogger.log(
-            message: msg,
-            level: level,
-          );
+          terminalLogger.logByLevel(msg, level);
         };
   }
 

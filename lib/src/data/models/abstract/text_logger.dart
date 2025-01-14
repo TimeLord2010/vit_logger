@@ -73,4 +73,23 @@ abstract class TextLogger extends BaseLogger {
       level: LogLevel.debug,
     );
   }
+
+  void logByLevel(String message, LogLevel level) async {
+    void Function(String message) logFn;
+    switch (level) {
+      case LogLevel.info:
+        logFn = info;
+        break;
+      case LogLevel.warn:
+        logFn = warn;
+        break;
+      case LogLevel.error:
+        logFn = error;
+        break;
+      case LogLevel.debug:
+        logFn = debug;
+        break;
+    }
+    logFn(message);
+  }
 }
