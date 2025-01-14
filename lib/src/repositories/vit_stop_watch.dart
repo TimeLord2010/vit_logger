@@ -30,22 +30,33 @@ class VitStopWatch {
   /// calculated from the instance's creation time, are marked as errors.
   final Duration? minErrorDuration;
 
+  /// Whether to show info logs.
+  ///
+  /// If [minWarnDuration] and [minErrorDuration] are not set, logs are marked
+  /// as info logs.
+  final bool showInfoLogs;
+
   VitStopWatch(
     this.event, {
     void Function(StopWatchLapData data, LogLevel level)? logger,
     this.minWarnDuration,
     this.minErrorDuration,
+    this.showInfoLogs = true,
   }) : start = DateTime.now() {
     loggerFn = logger ??
         (data, level) async {
           var event = data.event;
           var tag = data.tag;
-          var milli = data.lap.lapElapsed.inMilliseconds;
+          var eventMilli = data.lap.eventElapsed.inMilliseconds;
+          var lapMilli = data.lap.lapElapsed.inMilliseconds;
+          var milliStr = lapMilli > 0
+              ? '${eventMilli}ms [+$lapMilli ms]'
+              : '${eventMilli}ms';
           String msg;
           if (tag == null) {
-            msg = '$event (${milli}ms)';
+            msg = '$event ($milliStr)';
           } else {
-            msg = '$event [$tag] (${milli}ms)';
+            msg = '$event [$tag] ($milliStr)';
           }
           var terminalLogger = TerminalLogger(event: event);
           await terminalLogger.log(
@@ -88,13 +99,13 @@ class VitStopWatch {
       tag: tag,
     );
     var duration = lap.eventElapsed;
-    LogLevel level = LogLevel.info;
     if (minErrorDuration != null && duration > minErrorDuration!) {
-      level = LogLevel.error;
+      loggerFn(data, LogLevel.error);
     } else if (minWarnDuration != null && duration > minWarnDuration!) {
-      level = LogLevel.warn;
+      loggerFn(data, LogLevel.warn);
+    } else if (showInfoLogs) {
+      loggerFn(data, LogLevel.info);
     }
-    loggerFn(data, level);
 
     return lap;
   }

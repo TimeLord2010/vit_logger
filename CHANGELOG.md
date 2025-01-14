@@ -1,3 +1,7 @@
+## 2.2.0
+
+* Added [showInfoLogs] to provide better control over what is printed.
+
 ## 2.1.1
 
 * Fix exporting missing TerminalPrinter enum.
